@@ -2,10 +2,45 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
-	"os/exec"
 	"time"
 )
+
+// import (
+// "fmt"
+// "os"
+// "os/exec"
+// "time"
+// )
+
+func startNewProcess(currentProcess *os.Process) *os.Process {
+	var err error
+
+	if currentProcess != nil {
+		fmt.Printf("Killing process %d\n", currentProcess.Pid)
+		currentProcess.Release()
+		currentProcess.Kill()
+		currentProcess.Wait()
+	}
+
+	fmt.Println("Starting new process")
+	currentProcess, err = os.StartProcess("/usr/local/go/bin/go", []string{"go", "run", "."}, &os.ProcAttr{
+		Files: []*os.File{
+			os.Stdin,
+			os.Stdout,
+			os.Stderr,
+		},
+	})
+
+	fmt.Println("currentProcess:", currentProcess.Pid)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return currentProcess
+}
 
 func main() {
 	// var data string = readFile("data.txt")
@@ -27,26 +62,15 @@ func main() {
 	// fmt.Printf("%p\n", filesMap)
 
 	var filesMap, updated = updateFilesMap(nil, ".")
+	var currentProcess *os.Process = nil
 
 	// fmt.Println(filesMap, updated)
 
 	for {
 		if updated {
-			fmt.Println("Initializing...")
+			currentProcess = startNewProcess(currentProcess)
 
-			cmd := exec.Command("go", "run", ".")
-
-			cmd.Stdout = os.Stdout
-
-			err := cmd.Run()
-
-			if err != nil {
-				fmt.Println(err)
-			}
-
-			if err != nil {
-				fmt.Println(err)
-			}
+			fmt.Println("currentProcess:", currentProcess)
 
 			fmt.Println("Done!")
 		}

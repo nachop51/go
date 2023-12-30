@@ -50,7 +50,10 @@ func updateFilesMap(filesMap map[string]os.FileInfo, dirname string) (map[string
 
 	for _, file := range files {
 		if file.IsDir() {
-			_, updated = updateFilesMap(filesMap, dirname+"/"+file.Name())
+			_, update := updateFilesMap(filesMap, dirname+"/"+file.Name())
+			if update {
+				updated = true
+			}
 			continue
 		}
 		if mapFile, ok := filesMap[dirname+"/"+file.Name()]; !ok {
@@ -63,8 +66,6 @@ func updateFilesMap(filesMap map[string]os.FileInfo, dirname string) (map[string
 			}
 		}
 	}
-
-	// fmt.Println(updated)
 
 	return filesMap, updated
 }
