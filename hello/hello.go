@@ -9,7 +9,7 @@ type Person struct {
 	age  float64
 }
 
-func main() {
+func Main2() {
 	var x = []int{1, 2, 3, 4, 5}
 
 	y := x[1:3]
@@ -40,8 +40,8 @@ func main() {
 
 	fmt.Println(p2.name, p2.age)
 
-	const PI float64 = 3.14159265358979323846264338327950288419716939937510582097494459
-	const PI2 = 3.14159265358979323846264338327950288419716939937510582097494459
+	const PI float64 = 3.141592653589793238462643383279502884197169399
+	const PI2 = 3.141592653589793238462643383279502884197169399
 
 	fmt.Printf("PI = %f\n", PI)
 	fmt.Println(PI2)
