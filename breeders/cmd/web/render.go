@@ -7,7 +7,7 @@ import (
 )
 
 type templateData struct {
-	Data map[string]interface{} // or interface{}
+	Data map[string]any // or interface{}
 }
 
 func (app *application) render(w http.ResponseWriter, name string, td *templateData) {
@@ -45,6 +45,7 @@ func (app *application) buildTemplateFromDisk(name string) (*template.Template, 
 	templateSlice := []string{
 		"./templates/base.layout.gohtml",
 		"./templates/partials/head.partial.gohtml",
+		"./templates/partials/navbar.partial.gohtml",
 		"./templates/partials/footer.partial.gohtml",
 		"./templates/" + name,
 	}

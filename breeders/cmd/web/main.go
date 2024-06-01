@@ -16,8 +16,10 @@ type appConfig struct {
 }
 
 type application struct {
+	// Add the template cache to the application struct
 	templateMap map[string]*template.Template
-	config      appConfig
+	// Another struct that contains a bunch of configuration settings for the app
+	config appConfig
 }
 
 func main() {

@@ -1,0 +1,25 @@
+{{ define "navbar" }}
+
+<div class="navbar bg-base-200">
+  <div class="flex-1">
+    <a href="/" class="btn btn-ghost text-xl">Breeders</a>
+  </div>
+  <div class="flex-none">
+    <ul class="menu menu-horizontal px-1">
+      <li><a href="/about">About</a></li>
+      <li>
+        <details>
+          <summary>
+            Breeds
+          </summary>
+          <ul class="p-2 bg-base-100 rounded-t-none">
+            <li><a href="/cat-breeds">Cat breeds</a></li>
+            <li><a href="/dog-breeds">Dog breeds</a></li>
+          </ul>
+        </details>
+      </li>
+    </ul>
+  </div>
+</div>
+
+{{ end }}

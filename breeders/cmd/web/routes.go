@@ -9,13 +9,20 @@ import (
 )
 
 func (app *application) routes() http.Handler {
-	mux := chi.NewRouter()
+	var mux = chi.NewRouter()
 
+	// Middlewares for the router
 	mux.Use(middleware.Recoverer)
 	mux.Use(middleware.Timeout(60 * time.Second))
 	mux.Use(middleware.Logger)
 
+	fileServer := http.FileServer(http.Dir("./static/"))
+
+	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))
+
+	// Routes definition starts here
 	mux.Get("/", app.ShowHome)
+	mux.Get("/{page}", app.ShowPage)
 
 	return mux
 }

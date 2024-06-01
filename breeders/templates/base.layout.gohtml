@@ -1,13 +1,12 @@
 {{ define "base" }}
+
 <!DOCTYPE html>
 <html lang="en">
   {{ template "head" . }}
-
-  {{ block "css" . }}
-
-  {{ end }}
-
   <body>
+
+    {{ template "navbar" . }}
+
     {{ block "content" . }}
 
     {{ end }}
@@ -19,5 +18,6 @@
     {{ end }}
   </body>
 </html>
+
 {{ end }}
 
