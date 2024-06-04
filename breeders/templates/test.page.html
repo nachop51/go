@@ -1,0 +1,75 @@
+{{ template "base" . }}
+
+{{ define "content" }}
+
+<div class="hero min-h-screen bg-base-200">
+  <div class="hero-content text-center">
+    <div class="max-w-md">
+      <h1 class="text-5xl font-bold">Test patterns</h1>
+      <div class="divider my-6"></div>
+      <h2 class="text-2xl font-bold">Factory pattern</h2>
+      <div class="grid grid-cols-2 gap-4 mt-8">
+        <button id="dog-factory-button" class="btn btn-primary">Create dog</button>
+        <button id="cat-factory-button" class="btn btn-primary">Create cat</button>
+        <pre id="dog-factory-output" class="p-4 text-left bg-base-100 text-base-content rounded-md w-fit"></pre>
+      </div>
+      <div class="divider my-6"></div>
+      <h2 class="text-2xl font-bold">Abstract Factory</h2>
+      <div class="grid grid-cols-2 gap-4 mt-8">
+        <button id="dog-abstract-factory-button" class="btn btn-primary">Create dog</button>
+        <button id="cat-abstract-factory-button" class="btn btn-primary">Create cat</button>
+        <pre id="dog-abstract-factory-output" class="p-4 text-left bg-base-100 text-base-content rounded-md w-fit"></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{ end }}
+
+{{ define "js" }}
+
+<script>
+  let dogFactoryButton = document.getElementById('dog-factory-button');
+  let catFactoryButton = document.getElementById('cat-factory-button');
+
+  let dogFactoryOutput = document.getElementById('dog-factory-output');
+
+  dogFactoryButton.addEventListener('click', () => {
+    fetch('/create-dog')
+      .then(response => response.json())
+      .then(data => {
+        dogFactoryOutput.innerHTML = JSON.stringify(data, null, 4);
+      });
+  });
+
+  catFactoryButton.addEventListener('click', () => {
+    fetch('/create-cat')
+      .then(response => response.json())
+      .then(data => {
+        dogFactoryOutput.innerHTML = JSON.stringify(data, null, 4);
+      });
+  });
+
+  let dogAbstractFactoryButton = document.getElementById('dog-abstract-factory-button');
+  let catAbstractFactoryButton = document.getElementById('cat-abstract-factory-button');
+  let dogAbstractFactoryOutput = document.getElementById('dog-abstract-factory-output');
+
+  dogAbstractFactoryButton.addEventListener('click', () => {
+    fetch('/create-dog-abstract')
+      .then(response => response.json())
+      .then(data => {
+        dogAbstractFactoryOutput.innerHTML = JSON.stringify(data, null, 4);
+      });
+  });
+
+  catAbstractFactoryButton.addEventListener('click', () => {
+    fetch('/create-cat-abstract')
+      .then(response => response.json())
+      .then(data => {
+        dogAbstractFactoryOutput.innerHTML = JSON.stringify(data, null, 4);
+      });
+  });
+
+</script>
+
+{{ end }}

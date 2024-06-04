@@ -1,0 +1,47 @@
+{{ template "base" . }}
+
+{{ define "content" }}
+
+<div class="hero min-h-screen bg-base-200">
+  <div class="hero-content text-center max-w-none">
+    <div>
+      <h1 class="text-5xl font-bold mb-6">Dog Dreeds</h1>
+
+      <table class="table table-zebra-zebra">
+        <thead class="bg-base-300 text-base">
+          <tr>
+            <th>Breed</th>
+            <th>Average Weight (lbs)</th>
+            <th>Average Lifespan (years)</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{{ end }}
+
+{{ define "js" }}
+
+<script type="module">
+  let data = await fetch("/api/dog-breeds")
+    .then(response => response.json())
+    .then(data => data);
+
+  let tbody = document.querySelector("tbody");
+
+  for (const el of data) {
+    tbody.innerHTML += `
+      <tr>
+        <td><a class="link" href="/dog-breeds/${el.id}">${el.breed}</a></td>
+        <td>${el.average_weight}</td>
+        <td>${el.average_lifespan}</td>
+      </tr>
+    `;
+  }
+
+</script>
+
+{{ end }}

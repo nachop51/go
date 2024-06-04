@@ -43,10 +43,10 @@ func (app *application) render(w http.ResponseWriter, name string, td *templateD
 
 func (app *application) buildTemplateFromDisk(name string) (*template.Template, error) {
 	templateSlice := []string{
-		"./templates/base.layout.gohtml",
-		"./templates/partials/head.partial.gohtml",
-		"./templates/partials/navbar.partial.gohtml",
-		"./templates/partials/footer.partial.gohtml",
+		"./templates/base.layout.html",
+		"./templates/partials/head.partial.html",
+		"./templates/partials/navbar.partial.html",
+		"./templates/partials/footer.partial.html",
 		"./templates/" + name,
 	}
 

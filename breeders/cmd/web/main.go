@@ -1,18 +1,23 @@
 package main
 
 import (
+	"breeders/models"
+	"database/sql"
 	"flag"
 	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 	"time"
+
+	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
 const port string = ":4000"
 
 type appConfig struct {
 	useCache bool
+	dsn      string
 }
 
 type application struct {
@@ -20,6 +25,10 @@ type application struct {
 	templateMap map[string]*template.Template
 	// Another struct that contains a bunch of configuration settings for the app
 	config appConfig
+	// Add a database connection pool to the application struct
+	db *sql.DB
+	// Add a models value to the application struct
+	Models models.Models
 }
 
 func main() {
@@ -32,9 +41,17 @@ func main() {
 	// })
 
 	flag.BoolVar(&app.config.useCache, "cache", false, "Enable template cache")
+	flag.StringVar(&app.config.dsn, "dsn", "postgres://postgres:postgres@localhost:5432/breeders?sslmode=disable", "Postgres data source name")
 	flag.Parse()
 
-	fmt.Printf("Template cache is enabled: %v\n", app.config.useCache)
+	db, err := initPostgres(app.config.dsn)
+
+	if err != nil {
+		log.Panic(err)
+	}
+
+	app.db = db
+	app.Models = *models.New(db)
 
 	server := &http.Server{
 		Addr:              port,
@@ -45,6 +62,8 @@ func main() {
 		WriteTimeout:      30 * time.Second,
 	}
 
+	fmt.Printf("Template cache is enabled: %v\n", app.config.useCache)
+
 	fmt.Printf("Starting server on port http://localhost%s\n", port)
 
 	// err := http.ListenAndServe(port, nil)
@@ -52,7 +71,7 @@ func main() {
 	// 	log.Fatal(err)
 	// }
 
-	err := server.ListenAndServe()
+	err = server.ListenAndServe()
 
 	if err != nil {
 		log.Fatal(err)

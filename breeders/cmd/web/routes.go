@@ -24,5 +24,13 @@ func (app *application) routes() http.Handler {
 	mux.Get("/", app.ShowHome)
 	mux.Get("/{page}", app.ShowPage)
 
+	mux.Get("/test-patterns", app.TestPatterns)
+	mux.Get("/create-dog", app.CreateDogFromFactory)
+	mux.Get("/create-cat", app.CreateCatFromFactory)
+
+	mux.Get("/create-dog-abstract", app.CreateDogFromAbstractFactory)
+	mux.Get("/create-cat-abstract", app.CreateCatFromAbstractFactory)
+	mux.Get("/api/dog-breeds", app.GetAllDogBreedsJSON)
+
 	return mux
 }
