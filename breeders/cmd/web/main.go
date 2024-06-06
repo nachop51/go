@@ -1,8 +1,7 @@
 package main
 
 import (
-	"breeders/models"
-	"database/sql"
+	"breeders/config"
 	"flag"
 	"fmt"
 	"html/template"
@@ -25,10 +24,8 @@ type application struct {
 	templateMap map[string]*template.Template
 	// Another struct that contains a bunch of configuration settings for the app
 	config appConfig
-	// Add a database connection pool to the application struct
-	db *sql.DB
-	// Add a models value to the application struct
-	Models models.Models
+	// Add the application struct to the application struct
+	App *config.Application
 }
 
 func main() {
@@ -50,8 +47,7 @@ func main() {
 		log.Panic(err)
 	}
 
-	app.db = db
-	app.Models = *models.New(db)
+	app.App = config.New(db)
 
 	server := &http.Server{
 		Addr:              port,

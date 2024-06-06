@@ -18,7 +18,17 @@
       <div class="grid grid-cols-2 gap-4 mt-8">
         <button id="dog-abstract-factory-button" class="btn btn-primary">Create dog</button>
         <button id="cat-abstract-factory-button" class="btn btn-primary">Create cat</button>
-        <pre id="dog-abstract-factory-output" class="p-4 text-left bg-base-100 text-base-content rounded-md w-fit"></pre>
+        <pre id="dog-abstract-factory-output"
+          class="p-4 text-left bg-base-100 text-base-content rounded-md w-fit"></pre>
+      </div>
+
+      <div class="divider my-6"></div>
+      <h2 class="text-2xl font-bold">Builder</h2>
+
+      <div class="grid grid-cols-2 gap-4 mt-8">
+        <button id="dog-builder-button" class="btn btn-primary">Create dog</button>
+        <button id="cat-builder-button" class="btn btn-primary">Create cat</button>
+        <pre id="dog-builder-output" class="p-4 text-left bg-base-100 text-base-content rounded-md w-fit"></pre>
       </div>
     </div>
   </div>
@@ -70,6 +80,26 @@
       });
   });
 
+  let dogBuilderButton = document.getElementById('dog-builder-button');
+  let catBuilderButton = document.getElementById('cat-builder-button');
+
+  let dogBuilderOutput = document.getElementById('dog-builder-output');
+
+  dogBuilderButton.addEventListener('click', () => {
+    fetch('/api/dog-from-builder')
+      .then(response => response.json())
+      .then(data => {
+        dogBuilderOutput.innerHTML = JSON.stringify(data, null, 4);
+      });
+  });
+
+  catBuilderButton.addEventListener('click', () => {
+    fetch('/api/cat-from-builder')
+      .then(response => response.json())
+      .then(data => {
+        dogBuilderOutput.innerHTML = JSON.stringify(data, null, 4);
+      });
+  });
 </script>
 
 {{ end }}

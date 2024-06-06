@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func (d *DogBreed) AllDogBreeds() ([]*DogBreed, error) {
+func (repo *postgresRepo) AllDogBreeds() ([]*DogBreed, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 
 	defer cancel()
@@ -14,7 +14,7 @@ func (d *DogBreed) AllDogBreeds() ([]*DogBreed, error) {
 
 	var dogBreeds []*DogBreed
 
-	rows, err := db.QueryContext(ctx, query)
+	rows, err := repo.db.QueryContext(ctx, query)
 
 	if err != nil {
 		return nil, err

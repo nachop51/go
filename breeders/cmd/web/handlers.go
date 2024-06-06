@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/tsawler/toolbox"
+	"github.com/go-chi/render"
 )
 
 func (app *application) ShowHome(w http.ResponseWriter, r *http.Request) {
@@ -33,15 +33,11 @@ func (app *application) ShowPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) CreateDogFromFactory(w http.ResponseWriter, r *http.Request) {
-	var t toolbox.Tools
-
-	_ = t.WriteJSON(w, http.StatusOK, pets.NewPet("dog"))
+	render.JSON(w, r, pets.NewPet("dog"))
 }
 
 func (app *application) CreateCatFromFactory(w http.ResponseWriter, r *http.Request) {
-	var t toolbox.Tools
-
-	_ = t.WriteJSON(w, http.StatusOK, pets.NewPet("cat"))
+	render.JSON(w, r, pets.NewPet("cat"))
 }
 
 func (app *application) TestPatterns(w http.ResponseWriter, r *http.Request) {
@@ -49,39 +45,80 @@ func (app *application) TestPatterns(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) CreateDogFromAbstractFactory(w http.ResponseWriter, r *http.Request) {
-	var t toolbox.Tools
-
 	dog, err := pets.NewPetFromAbstractFactory("dog")
 
 	if err != nil {
-		t.WriteJSON(w, http.StatusInternalServerError, err.Error())
+		render.JSON(w, r, err.Error())
 		return
 	}
 
-	t.WriteJSON(w, http.StatusOK, dog)
+	render.JSON(w, r, dog)
 }
 
 func (app *application) CreateCatFromAbstractFactory(w http.ResponseWriter, r *http.Request) {
-	var t toolbox.Tools
-
 	cat, err := pets.NewPetFromAbstractFactory("cat")
 
 	if err != nil {
-		t.WriteJSON(w, http.StatusInternalServerError, err.Error())
+		render.JSON(w, r, err.Error())
 		return
 	}
 
-	t.WriteJSON(w, http.StatusOK, cat)
+	render.JSON(w, r, cat)
 }
 
 func (app *application) GetAllDogBreedsJSON(w http.ResponseWriter, r *http.Request) {
-	var t toolbox.Tools
-	dogBreeds, err := app.Models.DogBreed.All()
+	dogBreeds, err := app.App.Models.DogBreed.All()
 
 	if err != nil {
-		t.WriteJSON(w, http.StatusInternalServerError, err.Error())
+		render.JSON(w, r, err.Error())
 		return
 	}
 
-	t.WriteJSON(w, http.StatusOK, dogBreeds)
+	render.JSON(w, r, dogBreeds)
+}
+
+func (app *application) CreateDogWithBuilder(w http.ResponseWriter, r *http.Request) {
+	p, err := pets.NewPetBuilder().
+		SetSpecies("dog").
+		SetBreed("Golden Retriever").
+		SetMinWeight(55).
+		SetMaxWeight(75).
+		SetWeight(65).
+		SetDescription("Friendly and intelligent").
+		SetLifeSpan("10-12 years").
+		SetGeographicOrigin("Scotland").
+		SetColor("Golden").
+		SetAge(2).
+		SetAgeEstimated(false).
+		Build()
+
+	if err != nil {
+		render.Status(r, http.StatusBadRequest)
+		render.JSON(w, r, err.Error())
+	}
+
+	render.JSON(w, r, p)
+}
+
+func (app *application) CreateCatWithBuilder(w http.ResponseWriter, r *http.Request) {
+	p, err := pets.NewPetBuilder().
+		SetSpecies("cat").
+		SetBreed("Siamese").
+		SetMinWeight(6).
+		SetMaxWeight(14).
+		SetWeight(10).
+		SetDescription("Affectionate and social").
+		SetLifeSpan("8-12 years").
+		SetGeographicOrigin("Thailand").
+		SetColor("Cream, fawn, cinnamon, chocolate, blue").
+		SetAge(3).
+		SetAgeEstimated(false).
+		Build()
+
+	if err != nil {
+		render.Status(r, http.StatusBadRequest)
+		render.JSON(w, r, err.Error())
+	}
+
+	render.JSON(w, r, p)
 }
