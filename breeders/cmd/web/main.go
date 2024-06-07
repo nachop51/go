@@ -1,6 +1,7 @@
 package main
 
 import (
+	"breeders/adapters"
 	"breeders/config"
 	"flag"
 	"fmt"
@@ -26,6 +27,8 @@ type application struct {
 	config appConfig
 	// Add the application struct to the application struct
 	App *config.Application
+	// Add the RemoteService struct to the application struct
+	catService *adapters.RemoteService
 }
 
 func main() {
@@ -48,6 +51,16 @@ func main() {
 	}
 
 	app.App = config.New(db)
+
+	// service := &adapters.RemoteService{
+	// 	Remote: &adapters.JSONBackend{},
+	// }
+
+	service := &adapters.RemoteService{
+		Remote: &adapters.XMLBackend{},
+	}
+
+	app.catService = service
 
 	server := &http.Server{
 		Addr:              port,

@@ -4,6 +4,7 @@ import "database/sql"
 
 type Repository interface {
 	AllDogBreeds() ([]*DogBreed, error)
+	GetBreedByName(string) (*DogBreed, error)
 }
 
 type postgresRepo struct {
@@ -27,5 +28,9 @@ func newTestRepo(*sql.DB) Repository {
 }
 
 func (repo *testRepository) AllDogBreeds() ([]*DogBreed, error) {
+	return nil, nil
+}
+
+func (repo *testRepository) GetBreedByName(string) (*DogBreed, error) {
 	return nil, nil
 }

@@ -122,3 +122,26 @@ func (app *application) CreateCatWithBuilder(w http.ResponseWriter, r *http.Requ
 
 	render.JSON(w, r, p)
 }
+
+func (app *application) GetAllCatBreedsJSON(w http.ResponseWriter, r *http.Request) {
+	catBreeds, err := app.catService.GetAllCatBreeds()
+
+	if err != nil {
+		render.Status(r, http.StatusInternalServerError)
+		render.JSON(w, r, err.Error())
+		return
+	}
+
+	render.JSON(w, r, catBreeds)
+}
+
+func (app *application) AnimalFromAbstractFactory(w http.ResponseWriter, r *http.Request) {
+	animal, err := pets.NewPetFromAbstractFactory("dog")
+
+	if err != nil {
+		render.JSON(w, r, err.Error())
+		return
+	}
+
+	render.JSON(w, r, animal)
+}

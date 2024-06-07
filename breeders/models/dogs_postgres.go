@@ -50,3 +50,31 @@ func (repo *postgresRepo) AllDogBreeds() ([]*DogBreed, error) {
 
 	return dogBreeds, nil
 }
+
+func (repo *postgresRepo) GetBreedByName(breed string) (*DogBreed, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+
+	defer cancel()
+
+	query := `SELECT id, breed, weight_low_lbs, weight_high_lbs, (weight_low_lbs + weight_high_lbs) / 2 as average_weight, lifespan, COALESCE(details, ''), COALESCE(alternate_names, ''), COALESCE(geographic_origin, '') FROM dog_breeds WHERE breed = $1`
+
+	d := &DogBreed{}
+
+	err := repo.db.QueryRowContext(ctx, query, breed).Scan(
+		&d.Id,
+		&d.Breed,
+		&d.WeightLowLbs,
+		&d.WeightHighLbs,
+		&d.AverageWeight,
+		&d.LifeSpan,
+		&d.Details,
+		&d.AlternateNames,
+		&d.GeographicOrigin,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return d, nil
+}
