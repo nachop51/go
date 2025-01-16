@@ -24,5 +24,4 @@ func test() {
 
 	emp.PrintName()
 	emp.Person.PrintName()
-
 }
